@@ -16,7 +16,7 @@ var photoContextH = 64;
 var intervalHandler;
 
 for (var i = 0; i < PHOTO_COUNT; i++) {
-    photoContainer.append("<canvas class='photo_frame' id='photo_frame_" + i + "'></canvas>");
+    photoContainer.append("<canvas width='64' height='64' class='photo_frame' id='photo_frame_" + i + "'></canvas>");
 }
 /****************************************************************************
  * User media (webcam)
@@ -75,12 +75,12 @@ function savePhoto() {
         return;
     }
     var photoContext = photo.getContext('2d');
-    photoContext.drawImage(video, 60, 0, 540, 480, 0, 0, photo.width, photo.height);
+    photoContext.drawImage(video, 60, 0, 480, 480, 0, 0, photo.width, photo.height);
     // applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
     count += 1;
-    if(count >= PHOTO_COUNT){
+    if (count >= PHOTO_COUNT) {
         clearInterval(intervalHandler);
     }
 }
