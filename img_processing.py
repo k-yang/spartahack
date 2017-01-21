@@ -6,16 +6,20 @@ from PIL import Image
 from io import BytesIO
 from uuid import uuid4
 import os
+from keras.preprocessing import image
 
 
 def image_data2array(b64data):
-    image_data = Image.open(BytesIO(base64.b64decode(b64data))).getdata()
-    image_array = np.asarray(image_data)
+    # image_data = Image.open(BytesIO(base64.b64decode(b64data))).getdata()
+    img = image.load_img(BytesIO(base64.b64decode(b64data)), target_size=(64, 64))
+    image_array = image.img_to_array(img)
+    # image_array = np.asarray(image_data)
     # data = { 
     #     'uid': uid,
     #     'frame': frame,
     #     'data': image_array
     #     }
+    # print image_array
     return image_array
 
 
@@ -29,7 +33,7 @@ def batch_convert(inc_data_list):
         #     data['data'],
         # )
         data_list.append(image_data2array(data))
-    return np.dstack(tuple(data_list))
+    return data_list
 
 
 def store_b64_str(data, filename):
@@ -38,12 +42,15 @@ def store_b64_str(data, filename):
 
 
 def store_nparray(array_list, classname):
+    print type(array_list)
     if not os.path.exists('./data/' + classname):
         os.makedirs('./data/' + classname)
     with open('./data/' + classname + '/' + str(uuid4()) + '.hkl', 'w') as f:
         hickle.dump(array_list, f)
+    with open('./data/' + classname + '/' + str(uuid4()) + '.pkl', 'w') as f:
+        pickle.dump(array_list, f)
     with open('./data/' + classname + '/' + str(uuid4()) + '.out', 'w') as f:
-        f.write(str(array_list.tolist()))
+        f.write(str(array_list))
 
 
 def retrieve_nparray(filename):

@@ -2,7 +2,7 @@ from keras.applications.vgg19 import VGG19
 from keras.applications.vgg19 import preprocess_input
 from keras.models import Model
 import numpy as np
-import glob, os
+import glob, os, pickle
 
 base_model = VGG19(weights='imagenet')
 model = Model(input=base_model.input, output=base_model.get_layer('block4_pool').output)
@@ -23,13 +23,14 @@ def vid_extract_features(x_list):
 def batch_vids_extract(folder_name):
     samples = []
     n_samples = 0
-    for file in os.listdir('./data'):
-        if file.endswith('.out'):
-            with open(file) as f:
-                feature_list = vid_extract_features(f)
+    for file_name in os.listdir('data/' + folder_name):
+        if file_name.endswith('.pkl'):
+            with open(os.getcwd()+'/data/' + folder_name + '/' + file_name) as f:
+                array_list = pickle.load(f)
+                feature_list = vid_extract_features(array_list)
                 samples.append(feature_list)
                 n_samples += 1
-    print 'n_samples: ' + n_samples + ' for class: ' + folder_name
+    print 'n_samples: {0} for class {1}'.format(n_samples,folder_name)
     return samples
 
 print batch_vids_extract('test')
