@@ -9,6 +9,11 @@ def webcam():
     return render_template("webcam.html")
 
 
+@app.route("/train")
+def train():
+    return render_template("train.html")
+
+
 @app.route('/convert', methods=['POST'])
 def convert():
     expected_values = ['uid', 'frame', 'data']
@@ -39,9 +44,9 @@ def batch_save():
         abort(400)
     image_array_list = batch_convert(request.json['data'])
     if 'class' in request.json:
-        classification = request.json['class']
+        classification = request.json['class'] or "unknown"
         try:
-            store_nparray(image_array_list, classification + str(request.json['data'][0]['uid']))
+            store_nparray(image_array_list, classification)
         except Exception as e:
             print e
             abort(500)

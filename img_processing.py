@@ -4,6 +4,8 @@ import hickle
 import pickle
 from PIL import Image
 from io import BytesIO
+from uuid import uuid4
+import os
 
 
 def image_data2array(b64data):
@@ -26,7 +28,7 @@ def batch_convert(inc_data_list):
         #     data['frame'],
         #     data['data'],
         # )
-        data_list.append(image_data2array(data['data']))
+        data_list.append(image_data2array(data))
     return np.dstack(tuple(data_list))
 
 
@@ -35,9 +37,13 @@ def store_b64_str(data, filename):
         pickle.dump(data, f)
 
 
-def store_nparray(array_list, filename):
-    with open('./data/' + filename + '.hkl', 'w') as f:
+def store_nparray(array_list, classname):
+    if not os.path.exists('./data/' + classname):
+        os.makedirs('./data/' + classname)
+    with open('./data/' + classname + '/' + str(uuid4()) + '.hkl', 'w') as f:
         hickle.dump(array_list, f)
+    with open('./data/' + classname + '/' + str(uuid4()) + '.out', 'w') as f:
+        f.write(str(array_list.tolist()))
 
 
 def retrieve_nparray(filename):
