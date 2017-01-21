@@ -36,8 +36,8 @@ function gotStream(stream) {
     window.stream = stream; // stream available to console
     video.src = streamURL;
     video.onloadedmetadata = function () {
-        photo.width = photoContextW = 640;
-        photo.height = photoContextH = 480;
+        photo.width = photoContextW = 120;
+        photo.height = photoContextH = 90;
         console.log('gotStream with with and height:', photoContextW, photoContextH);
     };
 }
