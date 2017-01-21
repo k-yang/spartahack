@@ -9,6 +9,8 @@ var photo = document.getElementById('photo');
 var photoContext = photo.getContext('2d');
 var photoData;
 var PHOTO_INTERVAL = 250;
+var PHOTO_COUNT = 16;
+var image_array = [];
 
 var photoContextW = 120;
 var photoContextH = 90;
@@ -69,16 +71,17 @@ function getSessionCookie() {
  * Photo Functions
  ****************************************************************************/
 
-function savePhoto(frame) {
+function savePhoto() {
     photoContext.drawImage(video, 0, 0, photo.width, photo.height);
-    applyImageFilter();
+    applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
-    return photoData;
+    image_array.push(photoData);
 
 }
 
-function applyImageFilter() {
-    var imgPixels = photoContext.getImageData(0, 0, photoContextW, photoContextH);
+function applyImageFilter(context) {
+    var start_time = performance.now();
+    var imgPixels = context.getImageData(0, 0, photoContextW, photoContextH);
     for (var y = 0; y < imgPixels.height; y++) {
         for (var x = 0; x < imgPixels.width; x++) {
             var i = (y * 4) * imgPixels.width + x * 4;
@@ -93,7 +96,11 @@ function applyImageFilter() {
             }
         }
     }
-    photoContext.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+    context.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+    var end_time = performance.now();
+
+    // console.log(end_time - start_time);
 }
 
 function isRed(r, g, b) {
@@ -118,12 +125,12 @@ function hide() {
 }
 
 function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
     }
-  }
 }
 
 /****************************************************************************
@@ -132,31 +139,37 @@ function sleep(milliseconds) {
 
 initWebCam();
 
-$("#snap").click(function () {
-    var image_array = [];
 
-    for (var i = 0; i < 16; i++) {
-        image_array.push(savePhoto(i));
-        sleep(PHOTO_INTERVAL);
+/****************************************************************************
+ * Event Handlers
+ ****************************************************************************/
+$("#snap").click(function () {
+
+    for (var i = 0; i < PHOTO_COUNT; i++) {
+        setTimeout(savePhoto, PHOTO_INTERVAL * i);
     }
 
-    var post_data = {
+    setTimeout(function () {
+        var post_data = {
             data: image_array,
             uid: getSessionCookie(),
             class: $("#class").val()
         };
-    console.log(post_data);
-    var jsonData = JSON.stringify(post_data);
-    $.ajax({
-        type: "POST",
-        url: "/batch_save",
-        headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
-        data: jsonData,
-        crossDomain: true,
-        dataType: "json"
-    })
-        .done(function (msg) {
-            console.log(msg);
-        });
+        console.log(post_data);
+        var jsonData = JSON.stringify(post_data);
+        $.ajax({
+            type: "POST",
+            url: "/batch_save",
+            headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
+            data: jsonData,
+            crossDomain: true,
+            dataType: "json"
+        })
+            .done(function (msg) {
+                console.log(msg);
+            });
+    }, PHOTO_INTERVAL * PHOTO_COUNT);
+
+
 })
 ;
