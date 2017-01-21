@@ -5,8 +5,7 @@
  ****************************************************************************/
 
 var video = document.querySelector('video');
-var photo = document.getElementById('photo');
-var photoContext = photo.getContext('2d');
+var photoContainer = $("#photo_container");
 var photoData;
 var PHOTO_INTERVAL = 250;
 var PHOTO_COUNT = 16;
@@ -14,7 +13,11 @@ var image_array = [];
 var count = 0;
 var photoContextW = 64;
 var photoContextH = 64;
+var intervalHandler;
 
+for (var i = 0; i < PHOTO_COUNT; i++) {
+    photoContainer.append("<canvas width='64' height='64' class='photo_frame' id='photo_frame_" + i + "'></canvas>");
+}
 /****************************************************************************
  * User media (webcam)
  ****************************************************************************/
@@ -36,11 +39,6 @@ function gotStream(stream) {
     console.log('getUserMedia video stream URL:', streamURL);
     window.stream = stream; // stream available to console
     video.src = streamURL;
-    video.onloadedmetadata = function () {
-        photo.width = photoContextW;
-        photo.height = photoContextH;
-        console.log('gotStream with with and height:', photoContextW, photoContextH);
-    };
 }
 
 /****************************************************************************
@@ -72,11 +70,19 @@ function getSessionCookie() {
  ****************************************************************************/
 
 function savePhoto() {
-    photoContext.drawImage(video, 60, 0, 540, 480, 0, 0, photo.width, photo.height);
+    var photo = document.getElementById("photo_frame_" + count);
+    if (!photo) {
+        return;
+    }
+    var photoContext = photo.getContext('2d');
+    photoContext.drawImage(video, 60, 0, 480, 480, 0, 0, photo.width, photo.height);
     // applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
     count += 1;
+    if (count >= PHOTO_COUNT) {
+        clearInterval(intervalHandler);
+    }
 }
 
 function applyImageFilter(context) {
@@ -146,15 +152,14 @@ initWebCam();
 $("#snap").click(function () {
     image_array = [];
     count = 0;
-    for (var i = 0; i < PHOTO_COUNT; i++) {
-        setTimeout(savePhoto, PHOTO_INTERVAL * i);
-    }
+
+    intervalHandler = setInterval(savePhoto, PHOTO_INTERVAL);
 
     setTimeout(function () {
         var post_data = {
             data: image_array,
             uid: getSessionCookie(),
-            class: $("#class").val()
+            class: $("#classification").val()
         };
         console.log(post_data);
         var jsonData = JSON.stringify(post_data);
@@ -169,7 +174,6 @@ $("#snap").click(function () {
             .done(function (msg) {
                 console.log(msg);
             });
-        console.log(count);
     }, PHOTO_INTERVAL * PHOTO_COUNT);
 
 
