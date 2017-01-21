@@ -29,5 +29,7 @@ def batch_vids_extract(folder_name):
                 feature_list = vid_extract_features(f)
                 samples.append(feature_list)
                 n_samples += 1
-    print 'n_samples: ' + n_samples + 'for class: ' + folder_name
+    print 'n_samples: ' + n_samples + ' for class: ' + folder_name
     return samples
+
+print batch_vids_extract('test')
