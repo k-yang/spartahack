@@ -76,7 +76,7 @@ function savePhoto() {
     }
     var photoContext = photo.getContext('2d');
     photoContext.drawImage(video, 60, 0, 480, 480, 0, 0, photo.width, photo.height);
-    // applyImageFilter(photoContext);
+    applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
     count += 1;
@@ -110,7 +110,7 @@ function applyImageFilter(context) {
 }
 
 function isRed(r, g, b) {
-    return r > 110 && g < 100 && b < 100;
+    return r > 100 && g < 100 && b < 100;
 }
 
 
