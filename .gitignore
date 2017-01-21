@@ -6,3 +6,4 @@ lib
 .Python
 pip-selfcheck.json
 *.hkl
+*.out

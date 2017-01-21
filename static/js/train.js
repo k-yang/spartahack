@@ -4,15 +4,16 @@
  * Initial setup
  ****************************************************************************/
 
-// var roomURL = document.getElementById('url');
 var video = document.querySelector('video');
 var photo = document.getElementById('photo');
 var photoContext = photo.getContext('2d');
 var photoData;
 var PHOTO_INTERVAL = 250;
+var PHOTO_COUNT = 16;
+var image_array = [];
 
-var photoContextW;
-var photoContextH;
+var photoContextW = 120;
+var photoContextH = 90;
 
 /****************************************************************************
  * User media (webcam)
@@ -36,8 +37,8 @@ function gotStream(stream) {
     window.stream = stream; // stream available to console
     video.src = streamURL;
     video.onloadedmetadata = function () {
-        photo.width = photoContextW = 120;
-        photo.height = photoContextH = 90;
+        photo.width = photoContextW;
+        photo.height = photoContextH;
         console.log('gotStream with with and height:', photoContextW, photoContextH);
     };
 }
@@ -72,46 +73,34 @@ function getSessionCookie() {
 
 function savePhoto() {
     photoContext.drawImage(video, 0, 0, photo.width, photo.height);
+    applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
-    var data = {
-        image: photoData,
-        user_id: getSessionCookie()
-    };
-    console.log(data);
+    image_array.push(photoData);
 
-    applyImageFilter();
-
-    // var jsonData = JSON.stringify(data);
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/collect",
-    //     headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
-    //     data: jsonData,
-    //     crossDomain: true,
-    //     dataType: "json"
-    // })
-    //     .done(function (msg) {
-    //         console.log(msg);
-    //     });
 }
 
-function applyImageFilter() {
-    var imgPixels = photoContext.getImageData(0, 0, photoContextW, photoContextH);
-    for(var y = 0; y < imgPixels.height; y++) {
-        for(var x = 0; x < imgPixels.width; x++) {
+function applyImageFilter(context) {
+    var start_time = performance.now();
+    var imgPixels = context.getImageData(0, 0, photoContextW, photoContextH);
+    for (var y = 0; y < imgPixels.height; y++) {
+        for (var x = 0; x < imgPixels.width; x++) {
             var i = (y * 4) * imgPixels.width + x * 4;
 
             var r = imgPixels.data[i];
-            var g = imgPixels.data[i+1];
-            var b = imgPixels.data[i+2];
+            var g = imgPixels.data[i + 1];
+            var b = imgPixels.data[i + 2];
 
-            if (!isRed(r,g,b)) {
-                var avg = (r+g+b) / 3;
+            if (!isRed(r, g, b)) {
+                var avg = (r + g + b) / 3;
                 imgPixels.data[i] = imgPixels.data[i + 1] = imgPixels.data[i + 2] = avg;
             }
         }
     }
-    photoContext.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+    context.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+
+    var end_time = performance.now();
+
+    // console.log(end_time - start_time);
 }
 
 function isRed(r, g, b) {
@@ -135,12 +124,52 @@ function hide() {
     });
 }
 
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
+    }
+}
+
 /****************************************************************************
  * Init
  ****************************************************************************/
 
 initWebCam();
 
+
+/****************************************************************************
+ * Event Handlers
+ ****************************************************************************/
 $("#snap").click(function () {
-    savePhoto();
-});
+
+    for (var i = 0; i < PHOTO_COUNT; i++) {
+        setTimeout(savePhoto, PHOTO_INTERVAL * i);
+    }
+
+    setTimeout(function () {
+        var post_data = {
+            data: image_array,
+            uid: getSessionCookie(),
+            class: $("#class").val()
+        };
+        console.log(post_data);
+        var jsonData = JSON.stringify(post_data);
+        $.ajax({
+            type: "POST",
+            url: "/batch_save",
+            headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
+            data: jsonData,
+            crossDomain: true,
+            dataType: "json"
+        })
+            .done(function (msg) {
+                console.log(msg);
+            });
+    }, PHOTO_INTERVAL * PHOTO_COUNT);
+
+
+})
+;
