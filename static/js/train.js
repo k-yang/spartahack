@@ -11,9 +11,9 @@ var photoData;
 var PHOTO_INTERVAL = 250;
 var PHOTO_COUNT = 16;
 var image_array = [];
-
-var photoContextW = 120;
-var photoContextH = 90;
+var count = 0;
+var photoContextW = 64;
+var photoContextH = 64;
 
 /****************************************************************************
  * User media (webcam)
@@ -72,11 +72,11 @@ function getSessionCookie() {
  ****************************************************************************/
 
 function savePhoto() {
-    photoContext.drawImage(video, 0, 0, photo.width, photo.height);
-    applyImageFilter(photoContext);
+    photoContext.drawImage(video, 60, 0, 540, 480, 0, 0, photo.width, photo.height);
+    // applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
-
+    count += 1;
 }
 
 function applyImageFilter(context) {
@@ -144,7 +144,8 @@ initWebCam();
  * Event Handlers
  ****************************************************************************/
 $("#snap").click(function () {
-
+    image_array = [];
+    count = 0;
     for (var i = 0; i < PHOTO_COUNT; i++) {
         setTimeout(savePhoto, PHOTO_INTERVAL * i);
     }
@@ -168,6 +169,7 @@ $("#snap").click(function () {
             .done(function (msg) {
                 console.log(msg);
             });
+        console.log(count);
     }, PHOTO_INTERVAL * PHOTO_COUNT);
 
 
