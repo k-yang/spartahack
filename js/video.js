@@ -8,9 +8,7 @@
 var video = document.querySelector('video');
 var photo = document.getElementById('photo');
 var photoContext = photo.getContext('2d');
-var webcamSwitchRadio = document.getElementById("webcam-switch-radio");
 var photoData;
-var photoTimer;
 var PHOTO_INTERVAL = 250;
 
 var photoContextW;
@@ -60,10 +58,10 @@ function getCookie(cname) {
 }
 
 function getSessionCookie() {
-    var sessionCookie = getCookie("scoutSessionCookie");
+    var sessionCookie = getCookie("sessionCookie");
     if (sessionCookie == "") {
         sessionCookie = Math.random().toString(36);
-        window.document.cookie = "scoutSessionCookie=" + sessionCookie + "; expires=0; path=/";
+        window.document.cookie = "sessionCookie=" + sessionCookie + "; expires=0; path=/";
     }
     return sessionCookie;
 }
@@ -73,29 +71,25 @@ function getSessionCookie() {
  ****************************************************************************/
 
 function savePhoto() {
-    if (webcamSwitchRadio.checked) {
-        photoContext.drawImage(video, 0, 0, photo.width, photo.height);
-        photoData = photo.toDataURL().substring(22);
-        var data = {
-            image: photoData,
-            user_id: getSessionCookie(),
-            video_id: VIDEO_ID,
-            timestamp: Math.round(player.getCurrentTime() * 2)
-        };
-        console.log(data);
-        // var jsonData = JSON.stringify(data);
-        // $.ajax({
-        //     type: "POST",
-        //     url: "/collect",
-        //     headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
-        //     data: jsonData,
-        //     crossDomain: true,
-        //     dataType: "json"
-        // })
-        //     .done(function (msg) {
-        //         console.log(msg);
-        //     });
-    }
+    photoContext.drawImage(video, 0, 0, photo.width, photo.height);
+    photoData = photo.toDataURL().substring(22);
+    var data = {
+        image: photoData,
+        user_id: getSessionCookie()
+    };
+    console.log(data);
+    // var jsonData = JSON.stringify(data);
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/collect",
+    //     headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
+    //     data: jsonData,
+    //     crossDomain: true,
+    //     dataType: "json"
+    // })
+    //     .done(function (msg) {
+    //         console.log(msg);
+    //     });
 
 }
 
@@ -120,16 +114,8 @@ function hide() {
  * Init
  ****************************************************************************/
 
-webcamSwitchRadio.addEventListener("click", function () {
-    console.log(webcamSwitchRadio.checked);
-    if (webcamSwitchRadio.checked) {
-        initWebCam();
-    } else {
-        window.stream.getTracks()[0].stop();
-    }
-});
+initWebCam();
 
-
-$("#snap").click(function(){
+$("#snap").click(function () {
     savePhoto();
 });
