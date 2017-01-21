@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory, abort
 from img_processing import batch_convert, image_data2array, store_nparray
+
 app = Flask(__name__)
 
 
@@ -10,7 +11,7 @@ def webcam():
 
 @app.route('/convert', methods=['POST'])
 def convert():
-    expected_values = ['uid','frame','data']
+    expected_values = ['uid', 'frame', 'data']
     if not request.json or not all(value in request.json for value in expected_values):
         abort(400)
     data2convert = (
@@ -18,18 +19,19 @@ def convert():
         request.json['frame'],
         request.json['data'],
     )
-    image_array = image_data2array(*data2convert)
+    image_array = image_data2array(request.json['data'])
     if 'save' in request.json:
         print 'saving......'
         if request.json['save']:
             classification = request.json['class']
             try:
-                store_array_list(image_array,classification)
+                store_array_list(image_array, classification)
             except Exception as e:
                 print e
                 abort(500)
 
-    return jsonify({"success":True})
+    return jsonify({"success": True, "image_array": image_array.tolist()})
+
 
 @app.route('/batch_save', methods=['POST'])
 def batch_save():
@@ -43,7 +45,7 @@ def batch_save():
         except Exception as e:
             print e
             abort(500)
-    return jsonify({"success":True})
+    return jsonify({"success": True})
 
 
 if __name__ == "__main__":

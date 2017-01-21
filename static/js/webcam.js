@@ -4,7 +4,6 @@
  * Initial setup
  ****************************************************************************/
 
-// var roomURL = document.getElementById('url');
 var video = document.querySelector('video');
 var photo = document.getElementById('photo');
 var photoContext = photo.getContext('2d');
@@ -74,22 +73,23 @@ function savePhoto() {
     photoContext.drawImage(video, 0, 0, photo.width, photo.height);
     photoData = photo.toDataURL().substring(22);
     var data = {
-        image: photoData,
-        user_id: getSessionCookie()
+        data: photoData,
+        uid: getSessionCookie(),
+        frame: 0
     };
     console.log(data);
-    // var jsonData = JSON.stringify(data);
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/collect",
-    //     headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
-    //     data: jsonData,
-    //     crossDomain: true,
-    //     dataType: "json"
-    // })
-    //     .done(function (msg) {
-    //         console.log(msg);
-    //     });
+    var jsonData = JSON.stringify(data);
+    $.ajax({
+        type: "POST",
+        url: "/convert",
+        headers: {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"},
+        data: jsonData,
+        crossDomain: true,
+        dataType: "json"
+    })
+        .done(function (msg) {
+            console.log(msg);
+        });
 
 }
 
