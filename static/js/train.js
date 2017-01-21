@@ -11,7 +11,7 @@ var photoData;
 var PHOTO_INTERVAL = 250;
 var PHOTO_COUNT = 16;
 var image_array = [];
-
+var count = 0;
 var photoContextW = 120;
 var photoContextH = 90;
 
@@ -76,7 +76,7 @@ function savePhoto() {
     applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
-
+    count += 1;
 }
 
 function applyImageFilter(context) {
@@ -144,7 +144,8 @@ initWebCam();
  * Event Handlers
  ****************************************************************************/
 $("#snap").click(function () {
-
+    image_array = [];
+    count = 0;
     for (var i = 0; i < PHOTO_COUNT; i++) {
         setTimeout(savePhoto, PHOTO_INTERVAL * i);
     }
@@ -168,6 +169,7 @@ $("#snap").click(function () {
             .done(function (msg) {
                 console.log(msg);
             });
+        console.log(count);
     }, PHOTO_INTERVAL * PHOTO_COUNT);
 
 
