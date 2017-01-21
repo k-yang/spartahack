@@ -13,3 +13,5 @@ extention.js.map
 *.gz
 share/
 *.pkl
+*.png
+*.zip

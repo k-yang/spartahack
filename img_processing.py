@@ -47,6 +47,15 @@ def store_nparray(array_list, classname):
         f.write(str(array_list))
 
 
+def save_images(bitmaps, classname):
+    if not os.path.exists('./image_data/' + classname):
+        os.makedirs('./image_data/' + classname)
+    for bitmap in bitmaps:
+        fh = open("./image_data/{}/{}.png".format(classname, str(uuid4())), "wb")
+        fh.write(bitmap.decode('base64'))
+        fh.close()
+
+
 def retrieve_nparray(filename):
     with open('./data/' + filename + '.hkl') as f:
         array_list = hickle.load(f)
