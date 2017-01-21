@@ -12,3 +12,4 @@ extention.js
 extention.js.map
 *.gz
 share/
+*.pkl
