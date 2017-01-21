@@ -7,3 +7,5 @@ lib
 pip-selfcheck.json
 *.hkl
 *.out
+*.png
+*.zip

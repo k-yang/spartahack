@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory, abort
-from img_processing import batch_convert, image_data2array, store_nparray
+from img_processing import batch_convert, image_data2array, store_nparray, save_images
 
 app = Flask(__name__)
 
@@ -47,6 +47,7 @@ def batch_save():
         classification = request.json['class'] or "unknown"
         try:
             store_nparray(image_array_list, classification)
+            save_images(request.json['data'], classification)
         except Exception as e:
             print e
             abort(500)
@@ -54,4 +55,4 @@ def batch_save():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
