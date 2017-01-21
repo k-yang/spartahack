@@ -78,6 +78,9 @@ function savePhoto() {
         user_id: getSessionCookie()
     };
     console.log(data);
+
+    applyImageFilter();
+
     // var jsonData = JSON.stringify(data);
     // $.ajax({
     //     type: "POST",
@@ -90,7 +93,29 @@ function savePhoto() {
     //     .done(function (msg) {
     //         console.log(msg);
     //     });
+}
 
+function applyImageFilter() {
+    var imgPixels = photoContext.getImageData(0, 0, photoContextW, photoContextH);
+    for(var y = 0; y < imgPixels.height; y++) {
+        for(var x = 0; x < imgPixels.width; x++) {
+            var i = (y * 4) * imgPixels.width + x * 4;
+
+            var r = imgPixels.data[i];
+            var g = imgPixels.data[i+1];
+            var b = imgPixels.data[i+2];
+
+            if (!isRed(r,g,b)) {
+                var avg = (r+g+b) / 3;
+                imgPixels.data[i] = imgPixels.data[i + 1] = imgPixels.data[i + 2] = avg;
+            }
+        }
+    }
+    photoContext.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+}
+
+function isRed(r, g, b) {
+    return r > 110 && g < 100 && b < 100;
 }
 
 
