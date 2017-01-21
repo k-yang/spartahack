@@ -1,42 +1,43 @@
 import base64
-import numpy
+import numpy as np
 import hickle
 import pickle
 from PIL import Image
 from io import BytesIO
 
-def image_data2array(uid, frame, b64data):
+def image_data2array(b64data):
     image_data = Image.open(BytesIO(base64.b64decode(b64data))).getdata()
-    image_array = numpy.asarray(image_data)
-    data = { 
-        'uid': uid,
-        'frame': frame,
-        'data': image_array
-        }
-    return data
+    image_array = np.asarray(image_data)
+    # data = { 
+    #     'uid': uid,
+    #     'frame': frame,
+    #     'data': image_array
+    #     }
+    return image_array
 
+# Assume all frames come in order
 def batch_convert(inc_data_list):
     data_list = []
     for data in inc_data_list:
-        data2convert = (
-            data['uid'],
-            data['frame'],
-            data['data'],
-        )
-        data_list.append(image_data2array(*data2convert))
-    return data_list
+        # data2convert = (
+        #     data['uid'],
+        #     data['frame'],
+        #     data['data'],
+        # )
+        data_list.append(image_data2array(data['data']))
+    return np.dstack(tuple(data_list))
 
 def store_b64_str(data,filename):
-    with open(filename, 'w+') as f:
-        pickle.dump(data, './data/b64/'+filename+'.pkl')
+    with open('./data/b64/'+filename+'.pkl', 'w') as f:
+        pickle.dump(data, f)
 
-def store_array_list(array_list,filename):
-    with open(filename, 'w+') as f:
-        hickle.dump(array_list, './data/'+filename+'.hkl')
+def store_nparray(array_list,filename):
+    with open('./data/'+filename+'.hkl', 'w') as f:
+        hickle.dump(array_list, f)
 
-def retrieve_array_list(filename):
-    with open(filename) as f:
-        array_list = hickle.load('./data/'+filename+'.hkl')
+def retrieve_nparray(filename):
+    with open('./data/'+filename+'.hkl') as f:
+        array_list = hickle.load(f)
     return array_list
 
 

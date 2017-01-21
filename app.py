@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory, abort
-from img_processing import batch_convert, image_data2array, store_array_list
+from img_processing import batch_convert, image_data2array, store_nparray
 app = Flask(__name__)
 
 
@@ -39,9 +39,9 @@ def batch_save():
     if 'class' in request.json:
         classification = request.json['class']
         try:
-            store_array_list(image_array_list, classification + str(request.json['data'][0]['uid']))
+            store_nparray(image_array_list, classification + str(request.json['data'][0]['uid']))
         except Exception as e:
-            print 'Error:' + e
+            print e
             abort(500)
     return jsonify({"success":True})
 
