@@ -7,3 +7,8 @@ lib
 pip-selfcheck.json
 *.hkl
 *.out
+.ipynb_checkpoints
+extention.js
+extention.js.map
+*.gz
+share/
