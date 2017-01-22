@@ -89,7 +89,11 @@ $("#snap").click(function () {
             dataType: "json"
         })
             .done(function (msg) {
-                console.log(msg);
+                showMap(res.location);
+            
+                // res format : {"intent": intent, "location": "a110"}
+                //  trigger alexa here
+                // get intent and set pointer accordingly
             });
 
     }, PHOTO_INTERVAL * PHOTO_COUNT)

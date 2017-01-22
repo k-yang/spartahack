@@ -17,13 +17,14 @@ var action1 = function(){
 }
 
 // shows map and arrow, hide the rest
-var showMap = function(){
+var showMap = function(room){
     hideId('#action3');
     $('#face-icon').addClass('hidden');
     showHidden('#head-overlay');
     $('#head-overlay').addClass('map-bg')
     showHidden('#action4');
     showHidden('#arrow');
+    positionPointer(room);
 }
 
 // on key Z press trigger action1
@@ -36,4 +37,13 @@ document.onkeypress = function (e) {
 //moves the pointer to the correct location
 var positionPointer = function(pointer){
     $('#arrow').addClass(pointer)
+}
+
+var displayIntent = function(intent){
+    console.log(intent);
+    alert('add more pls');
+}
+
+var wakeAlexa = function(){
+    //do shit
 }
