@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory, abort
 from img_processing import *
 from watson.visual_recognition import *
+from mysql import connector
 
 app = Flask(__name__)
 
@@ -13,6 +14,28 @@ def webcam():
 @app.route("/train")
 def train():
     return render_template("train.html")
+
+
+@app.route("/alexa", methods=['POST'])
+def alexa():
+    if not request.json or 'data' not in request.json:
+        abort(400)
+    word = request.json['data']
+
+    cnx = connector.connection.MySQLConnection(
+        user = 'gestureadmin',
+        password = 'SpartansWill',
+        host = 'spartahackdb.c6kspdcu44vw.us-east-1.rds.amazonaws.com',
+        database = 'gesturedb'
+    )
+
+    cursor = cnx.cursor()
+
+    
+
+    cnx.close()
+
+
 
 
 @app.route('/convert', methods=['POST'])
