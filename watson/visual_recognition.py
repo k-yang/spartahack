@@ -2,8 +2,11 @@ from watson_developer_cloud import VisualRecognitionV3
 import json
 from os.path import join, dirname
 
-visual_recognition = VisualRecognitionV3('2016-05-20', api_key='2ade7a733941d304283b39368435fb386ce2e0dc')
-CLASSIFIER_ID = 'SpartaHacks_1070830303'
+# visual_recognition = VisualRecognitionV3('2016-05-20', api_key='2ade7a733941d304283b39368435fb386ce2e0dc') # old
+visual_recognition = VisualRecognitionV3('2016-05-20', api_key='47687f9277c0a4d104148ae0c9722fa6a54dfaad') # new SpartaHacks_849894342
+# visual_recognition = VisualRecognitionV3('2016-05-20', api_key='c4c544a7e6c5747263351da2fc6d918a471d8276')  # new new SpartaHacks_2063549702
+
+CLASSIFIER_ID = 'SpartaHacks_849894342'
 
 
 def delete_classifier():
@@ -28,11 +31,11 @@ def list_classifier():
 
 
 def create_classifier():
-    with open(join(dirname(__file__), '../test_data/apple.zip'), 'rb') as apple_data, \
-            open(join(dirname(__file__), '../test_data/orange.zip'), 'rb') as orange_data, \
-            open(join(dirname(__file__), '../test_data/pasta.zip'), 'rb') as pasta_data, \
-            open(join(dirname(__file__), '../test_data/help.zip'), 'rb') as help_data, \
-            open(join(dirname(__file__), '../test_data/milk.zip'), 'rb') as milk_data:
+    with open(join(dirname(__file__), '../test_data/apple/Archive.zip'), 'rb') as apple_data, \
+            open(join(dirname(__file__), '../test_data/orange/Archive.zip'), 'rb') as orange_data, \
+            open(join(dirname(__file__), '../test_data/pasta/Archive.zip'), 'rb') as pasta_data, \
+            open(join(dirname(__file__), '../test_data/help/Archive.zip'), 'rb') as help_data, \
+            open(join(dirname(__file__), '../test_data/milk/Archive.zip'), 'rb') as milk_data:
         print(json.dumps(visual_recognition.create_classifier('SpartaHacks',
                                                               apple_positive_examples=apple_data,
                                                               orange_positive_examples=orange_data,

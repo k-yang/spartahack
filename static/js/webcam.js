@@ -47,7 +47,7 @@ function gotStream(stream) {
 
 function savePhoto() {
     photoContext.drawImage(video, 60, 0, 480, 480, 0, 0, photo.width, photo.height);
-    // applyImageFilter(photoContext);
+    applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
 

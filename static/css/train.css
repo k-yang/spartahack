@@ -14,8 +14,8 @@
     transform: scaleX(-1);
     filter: FlipH;
     -ms-filter: "FlipH";
-    width: 128px;
-    height: 128px;
+    width: 64px;
+    height: 64px;
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 10px;
