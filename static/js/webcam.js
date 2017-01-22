@@ -80,6 +80,7 @@ var startGesture = function () {
         };
         var jsonData = JSON.stringify(data);
         console.log(data);
+        startLoadingDots()
         $.ajax({
             type: "POST",
             url: "/convert",

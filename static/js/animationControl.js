@@ -16,9 +16,14 @@ var action1 = function(){
         setTimeout(startGesture,2000)
     },3000)
 }
+var startLoadingDots = function(){
+    $('#loading').removeClass('hidden')
+    $('#action3').addClass('hidden')
+}
 var reset = false;
 // shows map and arrow, hide the rest
 var showMap = function(room){
+    hideId('#loading')
     hideId('#action3');
     $('#face-icon').addClass('hidden');
     showHidden('#head-overlay');
@@ -72,6 +77,7 @@ var resetAll = function(){
     $('#action4').text("");
     $('#error').addClass('hidden');
     $('#bubble').addClass('hidden');
+    $('#loading').addClass('hidden');
 }
 
 
