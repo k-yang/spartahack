@@ -32,5 +32,3 @@ def batch_vids_extract(folder_name):
                 n_samples += 1
     print 'n_samples: {0} for class {1}'.format(n_samples,folder_name)
     return samples
-
-print batch_vids_extract('test')
