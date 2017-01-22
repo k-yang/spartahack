@@ -6,6 +6,8 @@ from PIL import Image
 from io import BytesIO
 from uuid import uuid4
 import os
+from watson.visual_recognition import *
+import zipfile
 
 
 def image_data2array(b64data):
@@ -55,12 +57,31 @@ def save_test_images(bitmaps, classname):
         fh.close()
 
 
-def save_image(bitmap):
-    if not os.path.exists('./image_data/'):
-        os.makedirs('./image_data/')
-    fh = open("./image_data/{}.png".format(str(uuid4())), "wb")
+def save_image(bitmap, uid):
+    if not os.path.exists('./image_data/{}/'.format(uid)):
+        os.makedirs('./image_data/{}/'.format(uid))
+    fh = open("./image_data/{}/{}.png".format(uid, str(uuid4())), "wb")
     fh.write(bitmap.decode('base64'))
     fh.close()
+
+
+def save_images_to_zip(data, uid):
+    if not os.path.exists('./image_data/{}/'.format(uid)):
+        os.makedirs('./image_data/{}/'.format(uid))
+    for d in data:
+        fh = open("./image_data/{}/{}.png".format(uid, str(uuid4())), "wb")
+        fh.write(d.decode('base64'))
+        fh.close()
+
+    zip_name = zipfile.ZipFile("./image_data/{}/{}.zip".format(uid, str(uuid4())), 'w')
+
+    for filename in os.listdir("./image_data/{}/".format(uid)):
+        if ".png" in filename:
+            zip_name.write("./image_data/{}/{}".format(uid, filename), filename)
+
+    zip_name.close()
+
+    return uid + "/" + zip_name.filename.split("/")[-1]
 
 
 def retrieve_nparray(filename):
@@ -80,21 +101,21 @@ def retrieve_nparray(filename):
 #         file_name = rand_hash + '-' + index + '.jpg'
 #         with open('./data/' + classname + '/' + file_name,'w') as f:
 #             f.write(imgdata)
-        
 
-    # ######turn b64 string into jpg and save
-    # filename = 'example_b64_str_img.txt'
-    # with open(filename) as f:
-    #     img_data = base64.b64decode(f.read().strip())
-    # with open(filename + '.jpg','w+') as f:
-    #     f.write(img_data)
 
-    ######## testing
-    # filename = 'example_b64_str_img.txt'
-    # with open(filename) as f:
-    #     img_data = f.read().strip()
-    #     test = []
-    #     for i in range(5):
-    #         test.append((i,i,img_data))
-    #     result = batch_convert(test)
-    #     print result[3]
+# ######turn b64 string into jpg and save
+# filename = 'example_b64_str_img.txt'
+# with open(filename) as f:
+#     img_data = base64.b64decode(f.read().strip())
+# with open(filename + '.jpg','w+') as f:
+#     f.write(img_data)
+
+######## testing
+# filename = 'example_b64_str_img.txt'
+# with open(filename) as f:
+#     img_data = f.read().strip()
+#     test = []
+#     for i in range(5):
+#         test.append((i,i,img_data))
+#     result = batch_convert(test)
+#     print result[3]

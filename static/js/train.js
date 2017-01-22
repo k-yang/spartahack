@@ -59,7 +59,7 @@ function savePhoto() {
     count += 1;
     if (count >= PHOTO_COUNT) {
         clearInterval(intervalHandler);
-        clock.reset();
+        alert("Done capturing");
     }
 }
 

@@ -20,15 +20,15 @@ def convert():
     expected_values = ['uid', 'frame', 'data']
     if not request.json or not all(value in request.json for value in expected_values):
         abort(400)
-    image_array = image_data2array(request.json['data'])
-    if 'save' in request.json and request.json['save']:
-        try:
-            save_image(request.json['data'])
-        except Exception as e:
-            print e
-            abort(500)
 
-    return jsonify({"success": True, "image_array": image_array.tolist()})
+    uid = request.json['uid']
+    data = request.json['data']
+
+    zip_file = save_images_to_zip(data, uid)
+
+    intent = classify_image_from_filename(zip_file)
+
+    return jsonify({"success": True, "intent": intent})
 
 
 @app.route('/batch_save', methods=['POST'])
@@ -45,5 +45,3 @@ def batch_save():
             print e
             abort(500)
     return jsonify({"success": True})
-
-
