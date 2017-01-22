@@ -43,9 +43,9 @@ var positionPointer = function(pointer){
 
 var displayIntent = function(intent,location){
     console.log(intent);
-    reply = '';
-    if(intent=="help"){
-        reply = 'A moment please! One of our staff members is on their way.'
+    var reply;
+    if (intent=="help"){
+        reply = 'A moment please! One of our staff members is on their way. :)'
     } else {
         reply = 'The ' + intent + 'can be found in room' + location + '!'
     }
@@ -61,4 +61,10 @@ var resetAll = function(){
     $('#head-overlay').removeClass('map-bg');
     $('#arrow').removeClass();
     hideId('#arrow');
+    $('#action4').text("");
+}
+
+var showFailure = function(){
+    var reply = 'Sorry, we could not understand what you signed. Please try again! :(';
+    $('#action4').text(reply);
 }

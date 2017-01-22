@@ -92,10 +92,10 @@ var startGesture = function () {
             //  trigger alexa here
             // get intent and set pointer accordingly
             showMap(res.location);
-            displayIntent(res.intent);
+            displayIntent(res.intent,res.location);
             wakeAlexa();
         }).fail(function(err){
-            showMap();
+            showFailure();
         })
 
     }, PHOTO_INTERVAL * PHOTO_COUNT)
