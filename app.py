@@ -2,8 +2,7 @@ from flask import Flask, jsonify, request, render_template, send_from_directory,
 from img_processing import *
 from watson.visual_recognition import *
 from db import *
-
-# from mysql import connector
+from mysql import connector
 
 app = Flask(__name__)
 
@@ -62,7 +61,6 @@ def convert():
     alexa_request.location = "You can find {} at {}".format(intent, location.name)
     db_session.add(alexa_request)
     db_session.commit()
-
 
     return jsonify({"intent": intent, "location": location.name})
 
