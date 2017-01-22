@@ -44,10 +44,10 @@ exports.handler = (event, context) => {
 
  var mysql = require('mysql');
  var connection = mysql.createConnection({
-   host     : 'spartahackdb.c6kspdcu44vw.us-east-1.rds.amazonaws.com',
+   host     : 'gesture2.cn8pndyiytrv.us-east-1.rds.amazonaws.com',
    user     : 'gestureadmin',
    password : 'SpartansWill',
-   database : 'gesturedb'
+   database : 'Gesture'
  });
 
 connection.connect();
