@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory, abort
-from img_processing import batch_convert, image_data2array, store_nparray, save_images
+from img_processing import *
+from watson.visual_recognition import *
 
 app = Flask(__name__)
 
@@ -19,21 +20,13 @@ def convert():
     expected_values = ['uid', 'frame', 'data']
     if not request.json or not all(value in request.json for value in expected_values):
         abort(400)
-    data2convert = (
-        request.json['uid'],
-        request.json['frame'],
-        request.json['data'],
-    )
     image_array = image_data2array(request.json['data'])
-    if 'save' in request.json:
-        print 'saving......'
-        if request.json['save']:
-            classification = request.json['class']
-            try:
-                store_array_list(image_array, classification)
-            except Exception as e:
-                print e
-                abort(500)
+    if 'save' in request.json and request.json['save']:
+        try:
+            save_image(request.json['data'])
+        except Exception as e:
+            print e
+            abort(500)
 
     return jsonify({"success": True, "image_array": image_array.tolist()})
 
@@ -47,7 +40,7 @@ def batch_save():
         classification = request.json['class'] or "unknown"
         try:
             store_nparray(image_array_list, classification)
-            save_images(request.json['data'], classification)
+            save_test_images(request.json['data'], classification)
         except Exception as e:
             print e
             abort(500)

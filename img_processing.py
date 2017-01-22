@@ -6,15 +6,14 @@ from PIL import Image
 from io import BytesIO
 from uuid import uuid4
 import os
-from keras.preprocessing import image
 
 
 def image_data2array(b64data):
-    # image_data = Image.open(BytesIO(base64.b64decode(b64data))).getdata()
-    img = image.load_img(BytesIO(base64.b64decode(b64data)), target_size=(224, 224))
-    image_array = image.img_to_array(img)
-    # image_array = np.asarray(image_data)
-    # data = { 
+    image_data = Image.open(BytesIO(base64.b64decode(b64data))).getdata()
+    # img = Image.load_img(BytesIO(base64.b64decode(b64data)), target_size=(224, 224))
+    # image_array = image.img_to_array(img)
+    image_array = np.asarray(image_data)
+    # data = {
     #     'uid': uid,
     #     'frame': frame,
     #     'data': image_array
@@ -47,13 +46,21 @@ def store_nparray(array_list, classname):
         f.write(str(array_list))
 
 
-def save_images(bitmaps, classname):
-    if not os.path.exists('./image_data/' + classname):
-        os.makedirs('./image_data/' + classname)
+def save_test_images(bitmaps, classname):
+    if not os.path.exists('./test_data/' + classname):
+        os.makedirs('./test_data/' + classname)
     for bitmap in bitmaps:
-        fh = open("./image_data/{}/{}.png".format(classname, str(uuid4())), "wb")
+        fh = open("./test_data/{}/{}.png".format(classname, str(uuid4())), "wb")
         fh.write(bitmap.decode('base64'))
         fh.close()
+
+
+def save_image(bitmap):
+    if not os.path.exists('./image_data/'):
+        os.makedirs('./image_data/')
+    fh = open("./image_data/{}.png".format(str(uuid4())), "wb")
+    fh.write(bitmap.decode('base64'))
+    fh.close()
 
 
 def retrieve_nparray(filename):
