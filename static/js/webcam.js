@@ -67,7 +67,7 @@ initWebCam();
  * Event Handlers
  ****************************************************************************/
 
-$("#snap").click(function () {
+var startGesture = function () {
     image_array = [];
     count = 0;
     intervalHandler = setInterval(savePhoto, PHOTO_INTERVAL);
@@ -87,15 +87,16 @@ $("#snap").click(function () {
             data: jsonData,
             crossDomain: true,
             dataType: "json"
+        }).done(function (res) {
+            // res format : {"intent": intent, "location": "a110"}
+            //  trigger alexa here
+            // get intent and set pointer accordingly
+            showMap(res.location);
+            displayIntent(res.intent);
+            wakeAlexa();
+        }).fail(function(err){
+            showMap();
         })
-            .done(function (msg) {
-                showMap(res.location);
-            
-                // res format : {"intent": intent, "location": "a110"}
-                //  trigger alexa here
-                // get intent and set pointer accordingly
-                wakeAlexa();
-            });
 
     }, PHOTO_INTERVAL * PHOTO_COUNT)
-});
+};

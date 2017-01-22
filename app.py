@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory, abort
 from img_processing import *
 from watson.visual_recognition import *
-from mysql import connector
+# from mysql import connector
 
 app = Flask(__name__)
 
