@@ -16,7 +16,7 @@ var action1 = function(){
         setTimeout(startGesture,2000)
     },3000)
 }
-
+var reset = false;
 // shows map and arrow, hide the rest
 var showMap = function(room){
     hideId('#action3');
@@ -27,6 +27,12 @@ var showMap = function(room){
     showHidden('#arrow');
     positionPointer(room);
     displayIntent();
+    reset = true;
+    setTimeout(function(){
+        if (reset == true){
+            resetAll();
+        }
+    },6000)
 }
 
 // on key Z press trigger action1
@@ -67,4 +73,9 @@ var resetAll = function(){
 var showFailure = function(){
     var reply = 'Sorry, we could not understand what you signed. Please try again! :(';
     $('#action4').text(reply);
+}
+
+var showHelp = function(){
+    $('#face-icon').addClass('hidden');
+    
 }
