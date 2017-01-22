@@ -16,8 +16,11 @@
         <div class="row">
 {#            <div class="dot green darken-1"></div>#}
             <video class="grey lighten-2" id="camera" autoplay></video>
+            <div id="head-overlay">
+                <img class="face-icon" src="/static/img/face-icon-transparent.png"></img>
+            </div>
         </div>
-        <div class="row">
+        <div class="row hidden">
             <button id="snap">Take picture!</button>
 
             <canvas id="photo" height="64" width="64"></canvas>
