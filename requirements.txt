@@ -15,3 +15,6 @@ uwsgi
 supervisor
 keras
 tensorflow
+watson_developer_cloud
+MySQL-python
+mysql-connector
