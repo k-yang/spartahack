@@ -1,28 +1,42 @@
-<html>
-<head>
-    <title>SpartaHacks</title>
+{% extends 'layout/default.html' %}
+
+{% block stylesheets %}
     <link rel="stylesheet" href="/static/css/train.css">
-    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
-</head>
+{% endblock %}
 
-<body>
-<h2>Input Classification</h2>
-<input id="classification"/>
-<button id="snap">Capture!</button>
+{% block body %}
+    <div class="container">
+    <div class="row center-align">
+        <div class="col s8 offset-s2">
+            <h2>Input Classification</h2>
+            <input id="classification"/>
+            <button id="snap" class="waves-effect waves-light btn">Capture!</button>
+        </div>
+    </div>
 
-<br/>
-<br/>
-<video id="camera" autoplay></video>
+    <div class="row">
+        <div class="col s12">
+            <div class="timer"></div>
 
-<div id="photo_container">
-
-</div>
-<br/><br/>
+        </div>
+    </div>
 
 
-</body>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"
-        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-<script src="/static/js/adapter.js"></script>
-<script src="/static/js/train.js"></script>
-</html>
+    <div class="row">
+        <div class="col s12 center-align">
+            <video id="camera" autoplay></video>
+
+        </div>
+    </div>
+
+    <div id="photo_container">
+
+    </div>
+    <br/><br/>
+
+
+{% endblock %}
+{% block scripts %}
+    <script src="/static/js/adapter.js"></script>
+    <script src="/static/js/train.js"></script>
+{% endblock %}

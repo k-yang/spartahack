@@ -1,0 +1,9 @@
+nav {
+    height: 200px;
+}
+
+footer {
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+}
