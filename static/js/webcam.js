@@ -14,8 +14,8 @@ var intervalHandler;
 var count = 0;
 var image_array = [];
 
-var photoContextW = 64;
-var photoContextH = 64;
+var photoContextW = 480;
+var photoContextH = 480;
 
 /****************************************************************************
  * User media (webcam)
@@ -47,7 +47,7 @@ function gotStream(stream) {
 
 function savePhoto() {
     photoContext.drawImage(video, 60, 0, 480, 480, 0, 0, photo.width, photo.height);
-    applyImageFilter(photoContext);
+    // applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
 
@@ -91,6 +91,7 @@ var startGesture = function () {
             // res format : {"intent": intent, "location": "a110"}
             //  trigger alexa here
             // get intent and set pointer accordingly
+            console.log(res);
             showMap(res.location);
             displayIntent(res.intent,res.location);
             wakeAlexa();

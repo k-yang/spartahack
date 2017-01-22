@@ -2,34 +2,43 @@ from watson_developer_cloud import VisualRecognitionV3
 import json
 from os.path import join, dirname
 
-visual_recognition = VisualRecognitionV3('2016-05-20', api_key='3e5cc32fd8601944b7d1bf2e0fa69813e96be789')
-CLASSIFIER_ID = 'SpartaHacks_1659219344'
+visual_recognition = VisualRecognitionV3('2016-05-20', api_key='2ade7a733941d304283b39368435fb386ce2e0dc')
+CLASSIFIER_ID = 'SpartaHacks_1070830303'
 
 
 def delete_classifier():
-    print(json.dumps(visual_recognition.delete_classifier(CLASSIFIER_ID)))
+    classifier_id = list_all_classifiers()
+    if classifier_id:
+        print(json.dumps(visual_recognition.delete_classifier(classifier_id)))
 
 
 def list_all_classifiers():
-    print(json.dumps(visual_recognition.list_classifiers(), indent=2))
+    classifier_id = None
+    data = visual_recognition.list_classifiers()
+    if len(data['classifiers']) > 0:
+        classifier_id = data['classifiers'][0]['classifier_id']
+    print(json.dumps(data, indent=2))
+    return classifier_id
 
 
 def list_classifier():
-    print(json.dumps(visual_recognition.get_classifier(CLASSIFIER_ID), indent=2))
+    classifier_id = list_all_classifiers()
+    if classifier_id:
+        print(json.dumps(visual_recognition.get_classifier(classifier_id), indent=2))
 
 
 def create_classifier():
-    with open(join(dirname(__file__), '../test_data/bowl.zip'), 'rb') as bowl_data, \
-            open(join(dirname(__file__), '../test_data/apple.zip'), 'rb') as apple_data, \
+    with open(join(dirname(__file__), '../test_data/apple.zip'), 'rb') as apple_data, \
             open(join(dirname(__file__), '../test_data/orange.zip'), 'rb') as orange_data, \
             open(join(dirname(__file__), '../test_data/pasta.zip'), 'rb') as pasta_data, \
-            open(join(dirname(__file__), '../test_data/soup.zip'), 'rb') as soup_data:
+            open(join(dirname(__file__), '../test_data/help.zip'), 'rb') as help_data, \
+            open(join(dirname(__file__), '../test_data/milk.zip'), 'rb') as milk_data:
         print(json.dumps(visual_recognition.create_classifier('SpartaHacks',
-                                                              bowl_positive_examples=bowl_data,
                                                               apple_positive_examples=apple_data,
                                                               orange_positive_examples=orange_data,
                                                               pasta_positive_examples=pasta_data,
-                                                              soup_positive_examples=soup_data),
+                                                              help_positive_examples=help_data,
+                                                              milk_positive_examples=milk_data),
                          indent=2))
 
 

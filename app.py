@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template, send_from_directory,
 from img_processing import *
 from watson.visual_recognition import *
 from db import *
+
 # from mysql import connector
 
 app = Flask(__name__)
@@ -46,7 +47,11 @@ def convert():
 
     zip_file = save_images_to_zip(data, uid)
 
-    intent = classify_image_from_filename(zip_file)
+    try:
+        intent = classify_image_from_filename(zip_file)
+        delete_images()
+    except Exception as e:
+        return jsonify({"intent": "", "location": "", "error": "Watson Limit Exceeded"})
 
     db_session = Session()
     location = db_session.query(Location).filter_by(intent=intent).first()
@@ -55,10 +60,9 @@ def convert():
     alexa_request = Requests()
     alexa_request.intent = intent
     alexa_request.location = "You can find {} at {}".format(intent, location.name)
-    db_session.add(location)
+    db_session.add(alexa_request)
     db_session.commit()
 
-    delete_images()
 
     return jsonify({"intent": intent, "location": location.name})
 
@@ -67,13 +71,10 @@ def convert():
 def batch_save():
     if not request.json or 'data' not in request.json:
         abort(400)
-    image_array_list = batch_convert(request.json['data'])
-    if 'class' in request.json:
-        classification = request.json['class'] or "unknown"
-        try:
-            # store_nparray(image_array_list, classification)
-            save_test_images(request.json['data'], classification)
-        except Exception as e:
-            print e
-            abort(500)
+    classification = request.json['class'] or "unknown"
+    try:
+        save_test_images(request.json['data'], classification)
+    except Exception as e:
+        print e
+        abort(500)
     return jsonify({"success": True})

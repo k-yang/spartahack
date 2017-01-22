@@ -11,13 +11,13 @@ var PHOTO_INTERVAL = 100;
 var PHOTO_COUNT = 100;
 var image_array = [];
 var count = 0;
-var photoContextW = 64;
-var photoContextH = 64;
+var photoContextW = 128;
+var photoContextH = 128;
 var intervalHandler;
 var clock;
 
 for (var i = 0; i < PHOTO_COUNT; i++) {
-    photoContainer.append("<canvas width='64' height='64' class='photo_frame' id='photo_frame_" + i + "'></canvas>");
+    photoContainer.append("<canvas width='128' height='128' class='photo_frame' id='photo_frame_" + i + "'></canvas>");
 }
 /****************************************************************************
  * User media (webcam)
@@ -53,7 +53,7 @@ function savePhoto() {
     }
     var photoContext = photo.getContext('2d');
     photoContext.drawImage(video, 60, 0, 480, 480, 0, 0, photo.width, photo.height);
-    applyImageFilter(photoContext);
+    // applyImageFilter(photoContext);
     photoData = photo.toDataURL().substring(22);
     image_array.push(photoData);
     count += 1;

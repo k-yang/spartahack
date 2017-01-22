@@ -32,7 +32,6 @@ class Location(Base):
         return dict(
         )
 
-
 engine = sa.create_engine(
     'mysql+mysqldb://gestureadmin:SpartansWill@gesture2.cn8pndyiytrv.us-east-1.rds.amazonaws.com:3306/Gesture')
 Session = sessionmaker(bind=engine)
