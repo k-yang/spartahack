@@ -50,16 +50,18 @@ var positionPointer = function(pointer){
 var displayIntent = function(intent,location){
     console.log(intent);
     var reply;
+    var staff = ['Simon','Matthew','Victoria','Kevin']
     if (intent=="help"){
-        reply = 'A moment please! One of our staff members is on their way. :)'
+        reply = 'A moment please! One of our staff members('+staff[getRandomInt(0,3)]+') is on their way. :)'
     } else {
-        reply = 'The ' + intent + 'can be found in room' + location + '!'
+        reply = 'The ' + intent + ' can be found in room ' + location + '!'
     }
     $('#action4').text(reply)
 }
 
 var resetAll = function(){
     showHidden('#head-overlay');
+    showHidden('#face-icon');
     showHidden('#action1');
     hideId('#action2');
     hideId('#action3');
@@ -68,14 +70,16 @@ var resetAll = function(){
     $('#arrow').removeClass();
     hideId('#arrow');
     $('#action4').text("");
+    $('#error').addClass('hidden');
+    $('#bubble').addClass('hidden');
 }
 
-var showFailure = function(){
-    var reply = 'Sorry, we could not understand what you signed. Please try again! :(';
-    $('#action4').text(reply);
-}
 
 var showHelp = function(){
     $('#face-icon').addClass('hidden');
     
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }

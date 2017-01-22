@@ -79,3 +79,19 @@ var wakeAlexa = function(){
     var audio = new Audio('/static/audio/alexalaunchhelp.mp3');
     setTimeout(audio.play(),2000);
 }
+
+var showFailure = function(){
+    var reply = 'Sorry, I couldn\'t understand that...\ntry again!'.toUpperCase();
+    $('#action4').text(reply);
+    $('#action4').removeClass('hidden');
+    $('#action1').addClass('hidden');
+    $('#action2').addClass('hidden');
+    $('#action3').addClass('hidden');
+    $('#face-icon').addClass('hidden');
+    $('#error').removeClass('hidden')
+    $('#head-overlay').removeClass('hidden')
+    $('#bubble').removeClass('hidden')
+    setTimeout(function(){
+        resetAll();
+    },5000)
+}

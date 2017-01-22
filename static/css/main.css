@@ -9,7 +9,7 @@ footer {
 }
 
 body {
-    font-family: Montserrat;
+    font-family: roboto;
 }
 
 nav .brand-logo {
@@ -25,11 +25,13 @@ nav .brand-logo {
     background-color: #6184D8 !important;
 }
 
-#action1, #action2, #action3{
+#action1, #action2, #action3, #action4{
     margin: 10% auto auto -7%;
     height: 50%;
     width: 45%;
     font-size: 4em !important;
-    font-family: Montserrat;
+    font-family: roboto;
     color: #6184D8;
+    font-weight: 100;
+    transition: 0.3s linear;
 }
