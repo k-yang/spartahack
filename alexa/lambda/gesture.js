@@ -11,10 +11,33 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
+const mysql = require('mysql');
 
 const handlers = {
     'LaunchRequest': function () {
-        this.emit(':tell', 'fuck my life');
+        var obj = this;
+
+        var connection = mysql.createConnection({
+          host     : 'gesture2.cn8pndyiytrv.us-east-1.rds.amazonaws.com',
+          user     : 'gestureadmin',
+          password : 'SpartansWill',
+          database : 'Gesture'
+        });
+
+        connection.connect();
+
+        connection.query('SELECT * FROM Requests ORDER BY id DESC LIMIT 1', function(error, results, fields) {
+            if (error) {
+                obj.emit(':tell', 'Sorry, there was problem with our database');
+                throw error;
+            } else {
+                const res = results[0];
+                connection.end();
+                obj.emit(':tell', res.location);
+            }
+        });
+
+
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = this.t('HELP_MESSAGE');
@@ -37,24 +60,3 @@ exports.handler = (event, context) => {
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
-
-/****************************************************************************
- * Database setup
- ****************************************************************************/
-
- var mysql = require('mysql');
- var connection = mysql.createConnection({
-   host     : 'spartahackdb.c6kspdcu44vw.us-east-1.rds.amazonaws.com',
-   user     : 'gestureadmin',
-   password : 'SpartansWill',
-   database : 'gesturedb'
- });
-
-connection.connect();
-
-// connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-//   if (error) throw error;
-//   console.log('The solution is: ', results[0].solution);
-// });
-
-connection.end();
