@@ -7,3 +7,29 @@ footer {
     position: fixed;
     width: 100%;
 }
+
+body {
+    font-family: Montserrat;
+}
+
+nav .brand-logo {
+    position: absolute;
+    overflow: hidden;
+    margin-left: 1.8%;
+    margin-top: -25px;
+    width: 700;
+    height: 262;
+}
+
+.blue {
+    background-color: #6184D8 !important;
+}
+
+#action1, #action2, #action3{
+    margin: 4% auto auto -7%;
+    height: 50%;
+    width: 45%;
+    font-size: 4em !important;
+    font-family: Montserrat;
+    color: #6184D8;
+}
