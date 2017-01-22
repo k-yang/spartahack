@@ -9,7 +9,7 @@ var photo = document.getElementById('photo');
 var photoContext = photo.getContext('2d');
 var photoData;
 var PHOTO_INTERVAL = 100;
-var PHOTO_COUNT = 16;
+var PHOTO_COUNT = 8;
 var intervalHandler;
 var count = 0;
 var image_array = [];

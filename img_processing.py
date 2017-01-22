@@ -1,8 +1,8 @@
 import base64
-import numpy as np
-import hickle
-import pickle
-from PIL import Image
+# import numpy as np
+# import hickle
+# import pickle
+# from PIL import Image
 from io import BytesIO
 from uuid import uuid4
 import os
@@ -10,26 +10,26 @@ import zipfile
 import shutil
 
 
-def image_data2array(b64data):
-    image_data = Image.open(BytesIO(base64.b64decode(b64data))).getdata()
-    # img = Image.load_img(BytesIO(base64.b64decode(b64data)), target_size=(224, 224))
-    # image_array = image.img_to_array(img)
-    image_array = np.asarray(image_data)
-    # data = {
-    #     'uid': uid,
-    #     'frame': frame,
-    #     'data': image_array
-    #     }
-    # print image_array
-    return image_array
+# def image_data2array(b64data):
+#     image_data = Image.open(BytesIO(base64.b64decode(b64data))).getdata()
+#     # img = Image.load_img(BytesIO(base64.b64decode(b64data)), target_size=(224, 224))
+#     # image_array = image.img_to_array(img)
+#     image_array = np.asarray(image_data)
+#     # data = {
+#     #     'uid': uid,
+#     #     'frame': frame,
+#     #     'data': image_array
+#     #     }
+#     # print image_array
+#     return image_array
 
 
 # Assume all frames come in order
-def batch_convert(inc_data_list):
-    data_list = []
-    for data in inc_data_list:
-        data_list.append(image_data2array(data))
-    return data_list
+# def batch_convert(inc_data_list):
+#     data_list = []
+#     for data in inc_data_list:
+#         data_list.append(image_data2array(data))
+#     return data_list
 
 
 def store_b64_str(data, filename):

@@ -71,7 +71,7 @@ def batch_save():
     if 'class' in request.json:
         classification = request.json['class'] or "unknown"
         try:
-            store_nparray(image_array_list, classification)
+            # store_nparray(image_array_list, classification)
             save_test_images(request.json['data'], classification)
         except Exception as e:
             print e
