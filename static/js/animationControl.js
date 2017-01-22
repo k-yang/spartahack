@@ -44,6 +44,3 @@ var displayIntent = function(intent){
     alert('add more pls');
 }
 
-var wakeAlexa = function(){
-    //do shit
-}

@@ -94,6 +94,7 @@ $("#snap").click(function () {
                 // res format : {"intent": intent, "location": "a110"}
                 //  trigger alexa here
                 // get intent and set pointer accordingly
+                wakeAlexa();
             });
 
     }, PHOTO_INTERVAL * PHOTO_COUNT)

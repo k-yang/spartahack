@@ -75,4 +75,7 @@ function applyImageFilter(context) {
 function isRed(r, g, b) {
     return r > 110 && g < 100 && b < 100;
 }
-
+var wakeAlexa = function(){
+    var audio = new Audio('/static/audio/alexalaunchhelp.mp3');
+    setTimeout(audio.play(),2000);
+}
