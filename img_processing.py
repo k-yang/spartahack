@@ -6,8 +6,8 @@ from PIL import Image
 from io import BytesIO
 from uuid import uuid4
 import os
-from watson.visual_recognition import *
 import zipfile
+import shutil
 
 
 def image_data2array(b64data):
@@ -82,6 +82,10 @@ def save_images_to_zip(data, uid):
     zip_name.close()
 
     return uid + "/" + zip_name.filename.split("/")[-1]
+
+
+def delete_images():
+    shutil.rmtree("./image_data/")
 
 
 def retrieve_nparray(filename):

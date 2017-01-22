@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template, send_from_directory, abort
 from img_processing import *
 from watson.visual_recognition import *
+from db import *
 from mysql import connector
 
 app = Flask(__name__)
@@ -23,19 +24,15 @@ def alexa():
     word = request.json['data']
 
     cnx = connector.connection.MySQLConnection(
-        user = 'gestureadmin',
-        password = 'SpartansWill',
-        host = 'spartahackdb.c6kspdcu44vw.us-east-1.rds.amazonaws.com',
-        database = 'gesturedb'
+        user='gestureadmin',
+        password='SpartansWill',
+        host='spartahackdb.c6kspdcu44vw.us-east-1.rds.amazonaws.com',
+        database='gesturedb'
     )
 
     cursor = cnx.cursor()
 
-    
-
     cnx.close()
-
-
 
 
 @app.route('/convert', methods=['POST'])
@@ -51,7 +48,19 @@ def convert():
 
     intent = classify_image_from_filename(zip_file)
 
-    return jsonify({"success": True, "intent": intent})
+    db_session = Session()
+    location = db_session.query(Location).filter_by(intent=intent).first()
+    if location is None:
+        return jsonify({"intent": intent, "location": ""})
+    alexa_request = Requests()
+    alexa_request.intent = intent
+    alexa_request.location = "You can find {} at {}".format(intent, location.name)
+    db_session.add(location)
+    db_session.commit()
+
+    delete_images()
+
+    return jsonify({"intent": intent, "location": location.name})
 
 
 @app.route('/batch_save', methods=['POST'])

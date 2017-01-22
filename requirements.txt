@@ -18,3 +18,4 @@ tensorflow
 watson_developer_cloud
 MySQL-python
 mysql-connector
+sqlalchemy

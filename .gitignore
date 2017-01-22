@@ -14,4 +14,7 @@ extention.js.map
 share/
 *.pkl
 *.zip
-node_modules
+node_modules/
+image_data/
+test_data/
+
